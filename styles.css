@@ -1,0 +1,377 @@
+/* ==========================================================
+   styles.css — ILOHA スケジュール
+   ========================================================== */
+
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --text: #1f2937;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+  --primary: #4f46e5;
+  --primary-hover: #4338ca;
+  --primary-soft: #eef2ff;
+  --danger: #dc2626;
+  --row-alt: #f9fafb;
+  --row-hover: #eef2ff;
+  --shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --radius: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --border: #334155;
+    --primary: #818cf8;
+    --primary-hover: #a5b4fc;
+    --primary-soft: #312e81;
+    --danger: #f87171;
+    --row-alt: #243247;
+    --row-hover: #2e3a63;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 32px 16px 64px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "BIZ UDPGothic", "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI",
+    Meiryo, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- コンテナ ---------- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 28px 32px;
+}
+
+.container > p {
+  margin: 0 0 20px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-muted);
+  background: var(--primary-soft);
+  border-left: 4px solid var(--primary);
+  border-radius: 8px;
+}
+
+/* ---------- フィルター ---------- */
+#filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px 16px;
+  margin-bottom: 24px;
+  padding: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.filter-group label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+#filters input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+#filters input[type="text"]::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+#filters input[type="text"]:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+/* ---------- ボタン ---------- */
+.filter-button,
+.reset-button {
+  padding: 10px 20px;
+  font: inherit;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.05s, box-shadow 0.15s;
+}
+
+.filter-button {
+  color: #fff;
+  background: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.filter-button:hover {
+  background: var(--primary-hover);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.reset-button {
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.reset-button:hover {
+  background: var(--row-alt);
+}
+
+.filter-button:active,
+.reset-button:active {
+  transform: translateY(1px);
+}
+
+.filter-button:focus-visible,
+.reset-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent);
+  outline-offset: 2px;
+}
+
+/* ---------- テーブル ---------- */
+#schedule-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+#schedule-table th,
+#schedule-table td {
+  padding: 12px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+
+#schedule-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  background: var(--surface);
+  border-bottom: 2px solid var(--primary);
+}
+
+/* 角丸（border-collapse: separate でも崩れないように） */
+#schedule-table thead th:first-child {
+  border-top-left-radius: 12px;
+}
+#schedule-table thead th:last-child {
+  border-top-right-radius: 12px;
+}
+#schedule-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 列幅 */
+#schedule-table th:nth-child(1),
+#schedule-table td:nth-child(1) {
+  width: 64px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+}
+#schedule-table th:nth-child(2),
+#schedule-table td:nth-child(2) {
+  width: 130px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+#schedule-table th:nth-child(4),
+#schedule-table td:nth-child(4) {
+  width: 90px;
+  min-width: 70px;
+  white-space: nowrap;
+  font-weight: 600;
+}
+#schedule-table th:nth-child(5),
+#schedule-table td:nth-child(5) {
+  width: 90px;
+  white-space: nowrap;
+}
+#schedule-table th:nth-child(6),
+#schedule-table td:nth-child(6) {
+  width: 100px;
+  white-space: nowrap;
+  color: var(--text-muted);
+}
+
+/* ゼブラ & ホバー */
+#schedule-table tbody tr:nth-child(even) {
+  background: var(--row-alt);
+}
+#schedule-table tbody tr {
+  transition: background 0.12s;
+}
+#schedule-table tbody tr:hover {
+  background: var(--row-hover);
+}
+
+/* ソート可能ヘッダー */
+.sortable-table th[data-sort] {
+  cursor: pointer;
+  user-select: none;
+}
+.sortable-table th[data-sort]::after {
+  content: " ⇅";
+  opacity: 0.4;
+}
+.sortable-table th[data-sort]:hover {
+  color: var(--primary);
+}
+.sortable-table th[data-sort].asc::after {
+  content: " ▲";
+  opacity: 1;
+  color: var(--primary);
+}
+.sortable-table th[data-sort].desc::after {
+  content: " ▼";
+  opacity: 1;
+  color: var(--primary);
+}
+
+/* 取り消し線（変更・中止） */
+#schedule-table strike,
+#schedule-table del {
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+/* ---------- リンク（資料・動画など） ---------- */
+#schedule-table td a {
+  display: inline-block;
+  margin: 2px 2px 2px 4px;
+  padding: 1px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.7;
+  text-decoration: none;
+  color: var(--primary) !important; /* HTML側のインライン赤指定を上書き */
+  background: var(--primary-soft);
+  border-radius: 999px;
+  transition: background 0.15s, color 0.15s;
+}
+#schedule-table td a:hover {
+  color: #fff !important;
+  background: var(--primary);
+}
+#schedule-table td a font {
+  color: inherit !important;
+}
+
+/* 「中止」表示 */
+#schedule-table td span[style*="red"] {
+  color: var(--danger) !important;
+  font-weight: 700;
+}
+
+/* ---------- flatpickr 微調整 ---------- */
+.flatpickr-calendar {
+  font-family: inherit;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width: 720px) {
+  body {
+    padding: 12px 8px 40px;
+  }
+  .container {
+    padding: 16px 12px 20px;
+    border-radius: 10px;
+  }
+  #filters {
+    padding: 12px;
+  }
+  .filter-group {
+    flex: 1 1 100%;
+  }
+  .filter-button,
+  .reset-button {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  /* 横スクロール */
+  #schedule-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  #schedule-table td:nth-child(3) {
+    min-width: 260px;
+    white-space: normal;
+  }
+  #schedule-table thead th {
+    position: static;
+  }
+}
+
+/* ---------- 印刷 ---------- */
+@media print {
+  body {
+    background: #fff;
+  }
+  .container {
+    box-shadow: none;
+    padding: 0;
+  }
+  #filters {
+    display: none;
+  }
+  #schedule-table thead th {
+    position: static;
+  }
+}
